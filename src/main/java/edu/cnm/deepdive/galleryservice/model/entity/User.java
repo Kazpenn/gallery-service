@@ -1,5 +1,6 @@
 package edu.cnm.deepdive.galleryservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -12,7 +13,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.lang.NonNull;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
@@ -21,7 +21,6 @@ import org.springframework.lang.NonNull;
     name = "user_profile",
     indexes = {
         @Index(columnList = "created"),
-        @Index(columnList = "updated"),
         @Index(columnList = "connected")
     }
 )
@@ -41,17 +40,12 @@ public class User {
   private Date created;
 
   @NonNull
-  @UpdateTimestamp
-  @Temporal(TemporalType.TIMESTAMP)
-  @Column(nullable = false)
-  private Date updated;
-
-  @NonNull
   @Temporal(TemporalType.TIMESTAMP)
   @Column(nullable = false)
   private Date connected;
 
   @NonNull
+  @JsonIgnore
   @Column(nullable = false, updatable = false, unique = true)
   private String oauthKey;
 
@@ -67,11 +61,6 @@ public class User {
   @NonNull
   public Date getCreated() {
     return created;
-  }
-
-  @NonNull
-  public Date getUpdated() {
-    return updated;
   }
 
   @NonNull
