@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Mon Mar 08 14:44:33 MST 2021:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0178-13cc-835e-00000eda74a0 
+Wed Mar 10 09:43:12 MST 2021:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0178-1d05-568e-00000e9d5000 
 on database directory C:\Users\cgspe\Desktop\bootcamp\projects\gallery-service\gallery_db with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@368239c8 
 Loaded from file:/C:/Users/cgspe/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
 java.vendor=Amazon.com Inc.
