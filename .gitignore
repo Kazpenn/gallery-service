@@ -33,6 +33,6 @@ build/
 ### VS Code ###
 .vscode/
 
-#derby.log
+derby.log
 /gallery_db
 ddl.sql
