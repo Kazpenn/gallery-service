@@ -1,9 +1,11 @@
 package edu.cnm.deepdive.galleryservice.model.entity;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +23,10 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
@@ -31,7 +36,10 @@ import org.springframework.lang.NonNull;
         @Index(columnList = "title")
     }
 )
+@Component
 public class Gallery {
+
+  private static EntityLinks entityLinks;
 
   @NonNull
   @Id
@@ -64,7 +72,8 @@ public class Gallery {
   @JoinColumn(name = "creator_id", nullable = false, updatable = false)
   private User creator;
 
-  @OneToMany(mappedBy = "gallery", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH,})
+  @OneToMany(mappedBy = "gallery", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,
+      CascadeType.PERSIST, CascadeType.REFRESH,})
   @OrderBy("title ASC")
   private final List<Image> images = new LinkedList<>();
 
@@ -88,6 +97,10 @@ public class Gallery {
     return creator;
   }
 
+  public void setCreator(@NonNull User creator) {
+    this.creator = creator;
+  }
+
   public List<Image> getImages() {
     return images;
   }
@@ -107,6 +120,24 @@ public class Gallery {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+
+  public URI getHref() {
+    //noinspection ConstantConditions
+    return (id != null) ? entityLinks.linkForItemResource(Gallery.class, id).toUri() : null;
+  }
+
+  @Autowired
+  public void setEntityLinks(
+      @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityLinks entityLinks) {
+    Gallery.entityLinks = entityLinks;
+  }
+
+  @PostConstruct
+  private void initHateoas() {
+    //noinspection ResultOfMethodCallIgnored
+    entityLinks.hashCode();
   }
 
 

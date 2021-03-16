@@ -1,10 +1,12 @@
 package edu.cnm.deepdive.galleryservice.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.net.URI;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +21,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
@@ -30,7 +35,10 @@ import org.springframework.lang.NonNull;
         @Index(columnList = "connected")
     }
 )
+@Component
 public class User {
+
+  private static EntityLinks entityLinks;
 
   @NonNull
   @Id
@@ -59,11 +67,13 @@ public class User {
   @Column(nullable = false, unique = true)
   private String displayName;
 
+  @JsonIgnore
   @NonNull
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "contributor", cascade = CascadeType.ALL)
   @OrderBy("created DESC")
   private final List<Image> images = new LinkedList<>();
 
+  @JsonIgnore
   @NonNull
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator", cascade = CascadeType.ALL)
   @OrderBy("created DESC")
@@ -110,4 +120,22 @@ public class User {
   public List<Image> getImages() {
     return images;
   }
+
+  public URI getHref() {
+    //noinspection ConstantConditions
+    return (id != null) ? entityLinks.linkForItemResource(User.class, id).toUri() : null;
+  }
+
+  @Autowired
+  public void setEntityLinks(
+      @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityLinks entityLinks) {
+    User.entityLinks = entityLinks;
+  }
+
+  @PostConstruct
+  private void initHateoas() {
+    //noinspection ResultOfMethodCallIgnored
+    entityLinks.hashCode();
+  }
+
 }
