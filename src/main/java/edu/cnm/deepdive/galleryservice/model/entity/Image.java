@@ -68,7 +68,7 @@ public class Image {
 
   @JsonIgnore
   @NonNull
-  @Column(nullable = false, updatable = false)
+  @Column(name = "resource_key", nullable = false, updatable = false)
   private String key;
 
   @NonNull

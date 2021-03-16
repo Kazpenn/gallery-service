@@ -43,13 +43,13 @@ public class ImageController {
   }
 
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Image get(UUID id, Authentication auth) {
+  public Image get(@PathVariable UUID id, Authentication auth) {
     return imageService
         .get(id)
         .orElseThrow();
   }
 
-  @GetMapping("/{id}/content/")
+  @GetMapping("/{id}/content")
   public ResponseEntity<Resource> getContent(@PathVariable UUID id, Authentication auth) {
     return imageService
         .get(id)
