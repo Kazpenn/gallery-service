@@ -1,8 +1,10 @@
 package edu.cnm.deepdive.galleryservice.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import edu.cnm.deepdive.galleryservice.model.entity.Image;
 import edu.cnm.deepdive.galleryservice.model.entity.User;
 import edu.cnm.deepdive.galleryservice.service.ImageService;
+import edu.cnm.deepdive.galleryservice.view.ImageViews;
 import java.io.IOException;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ public class ImageController {
     this.imageService = imageService;
   }
 
+  @JsonView(ImageViews.Hierarchical.class)
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Image> post(@RequestParam MultipartFile file,
       @RequestParam(required = false) String title,
@@ -42,6 +45,7 @@ public class ImageController {
     return ResponseEntity.created(image.getHref()).body(image);
   }
 
+  @JsonView(ImageViews.Hierarchical.class)
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public Image get(@PathVariable UUID id, Authentication auth) {
     return imageService
