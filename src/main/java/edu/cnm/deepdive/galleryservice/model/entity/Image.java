@@ -104,6 +104,14 @@ public class Image {
     return contributor;
   }
 
+  public Gallery getGallery() {
+    return gallery;
+  }
+
+  public void setGallery(Gallery gallery) {
+    this.gallery = gallery;
+  }
+
   public void setContributor(@NonNull User contributor) {
     this.contributor = contributor;
   }
