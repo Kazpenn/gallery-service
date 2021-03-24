@@ -30,6 +30,10 @@ public class ImageService {
     return imageRepository.findById(id);
   }
 
+  public Iterable<Image> list() {
+    return imageRepository.getAllByOrderByCreatedDesc();
+  }
+
   public void delete(@NonNull Image image) throws IOException {
     storageService.delete(image.getKey());
     imageRepository.delete(image);
