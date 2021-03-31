@@ -41,7 +41,7 @@ public class ImageController {
   }
 
   @JsonView(ImageViews.Hierarchical.class)
-  @PostMapping(value = "/{galleryid}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/{galleryId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Image> post(
       @PathVariable(required = false) UUID galleryId,
       @RequestParam MultipartFile file,
