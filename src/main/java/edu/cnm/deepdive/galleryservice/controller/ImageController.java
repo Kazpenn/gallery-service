@@ -41,19 +41,6 @@ public class ImageController {
   }
 
   @JsonView(ImageViews.Hierarchical.class)
-  @PostMapping(value = "/{galleryId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Image> post(
-      @PathVariable(required = false) UUID galleryId,
-      @RequestParam MultipartFile file,
-      @RequestParam(required = false) String title,
-      @RequestParam(required = false) String description,
-      Authentication auth) throws IOException, HttpMediaTypeException {
-    return galleryService.get(galleryId)
-        .map((gallery) -> securePost(file, (User) auth.getPrincipal(), gallery, title, description))
-        .orElseThrow(ImageNotFoundException::new);
-  }
-
-  @JsonView(ImageViews.Hierarchical.class)
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public Image get(@PathVariable UUID id, Authentication auth) {
     return imageService
@@ -85,18 +72,6 @@ public class ImageController {
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<Image> list(Authentication auth) {
     return imageService.list();
-  }
-
-  private ResponseEntity<Image> securePost(MultipartFile file, User user, Gallery gallery,
-      String title, String description) {
-    try {
-      Image image = imageService.store(file, title, description, user, gallery);
-      return ResponseEntity.created(image.getHref()).body(image);
-    } catch (IOException e) {
-      throw new StorageException(e);
-    } catch (HttpMediaTypeException e) {
-      throw new MimeTypeNotAllowedException();
-    }
   }
 
 }
